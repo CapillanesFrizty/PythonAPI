@@ -1,17 +1,22 @@
-import psycopg2
 import os
-from dotenv import load_dotenv
+import psycopg2
 
-load_dotenv()
+DB_HOST = os.getenv("DB_PG_HOST")
+DB_USER = os.getenv("DB_PG_USER")
+DB_PASSWORD = os.getenv("DB_PG_PASSWORD")
+DB_NAME = os.getenv("DB_PG_NAME")
+DB_PORT = os.getenv("DB_PG_PORT", 5432)
 
-con = psycopg2.connect(
-  host= os.getenv("DB_PG_HOST"),
-  user= os.getenv("DB_PG_USER"),
-  password=os.getenv("DB_PG_PASSWORD"),
-  database= os.getenv("DB_PG_NAME"),
-  port = os.getenv("DB_PG_PORT"),
-)
+try:
+    con = psycopg2.connect(
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
+        port=DB_PORT,
+    )
+    print("Database connection successful")
 
-my_cursor = con.cursor()
-
-print(con)
+    my_cursor = con.cursor()
+except Exception as e:
+    print(f"Error connecting to the database: {e}")
